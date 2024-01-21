@@ -134,5 +134,5 @@ app.post("/delete", function(req, res){
 });
 
 app.listen(port,function() {
-  console.log("Server started at PORT ${port}");
+  console.log("Server started at port 3000");
 });
