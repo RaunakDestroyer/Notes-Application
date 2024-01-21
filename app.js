@@ -1,20 +1,21 @@
-//jshint esversion:6
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
+require("dotenv").config();
 
-const hostname = '0.0.0.0';
-const port = 3000;
 const app = express();
+const mongoURL = process.env.MONGO_URL; 
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://127.0.0.1:27017/todolistDB",{useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoURL,{
+  useNewUrlParser: true, 
+  useUnifiedTopology: true});
 
 const itemsSchema = {
   name: String
@@ -132,6 +133,6 @@ app.post("/delete", function(req, res){
 
 });
 
-app.listen(port,hostname, function() {
-  console.log("Server started at http://${hostname}:${port}/");
+app.listen(port,function() {
+  console.log("Server started at PORT ${port}");
 });
