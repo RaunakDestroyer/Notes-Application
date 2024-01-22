@@ -13,8 +13,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-mongoose.connect(mongoURL);
-
+mongoose.connect(mongoURL).then(() =>{
+  console.log(`Connection successful`);
+}).then((err) =>console.log(err.message));
+ 
 const itemsSchema = {
   name: String
 };
