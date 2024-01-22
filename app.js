@@ -5,7 +5,7 @@ const _ = require("lodash");
 require("dotenv").config();
 
 const app = express();
-const mongoURL = process.env.MONGO_URL; 
+const DB = process.env.MONGO_URL; 
 const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
@@ -13,9 +13,11 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-mongoose.connect(mongoURL).then(() =>{
-  console.log(`Connection successful`);
-}).then((err) =>console.log(err.message));
+mongoose.connect(DB).then(()=>{
+  console.log("connected to database successfully")
+}).catch((err)=>{
+  console.log('connection failed');
+});
  
 const itemsSchema = {
   name: String
