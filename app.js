@@ -5,26 +5,39 @@ const _ = require("lodash");
 require("dotenv").config();
 
 const app = express();
-const DB = process.env.MONGO_URL; 
+const DB = process.env.MONGO_URL;
 const port = process.env.PORT || 3000;
 
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-mongoose.connect(DB).then(()=>{
-  console.log("connected to database successfully")
-}).catch((err)=>{
-  console.log('connection failed');
+mongoose.connect(DB);
+const db = mongoose.connection;
+
+db.on('connected', () => {
+  console.log('Connected to MongoDB Server');
 });
- 
+
+db.on('error', (err) => {
+  console.log('MongoDB Connection erro:', err);
+});
+
+db.on('disconnected', () => {
+  console.log('MongoDB Disconnected');
+});
+// mongoose.connect(DB).then(() => {
+//   console.log("connected to database successfully");
+// }).catch((err) => {
+//   console.log('connection failed');
+// });
+
 const itemsSchema = {
   name: String
 };
 
 const Item = mongoose.model("Item", itemsSchema);
-
 
 const item1 = new Item({
   name: "Welcome to your todolist"
@@ -42,7 +55,7 @@ const defaultItems = [item1, item2, item3];
 
 const listSchema = {
   name: String,
-  items: [itemsSchema]
+  items: [itemsSchema] 
 };
 
 const List = mongoose.model("List", listSchema);
